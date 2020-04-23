@@ -2,12 +2,10 @@ FROM golang:1.14 AS builder
 LABEL maintainer="roman.atachiants@gmail.com"
 
 # Copy to GOPATH
-RUN apk add --no-cache gcc libc-dev
 RUN mkdir -p /usr/local/go/src/github.com/stripe/veneur/
 WORKDIR /usr/local/go/src/github.com/stripe/veneur/
 COPY . .
-RUN CGO_ENABLED=0 GOOS=linux go build -a
-
+RUN go build ./cmd/veneur/
 
 # Final container
 FROM debian AS final
