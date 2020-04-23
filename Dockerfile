@@ -8,7 +8,7 @@ ADD . /go/src/github.com/stripe/veneur/
 
 # Download and install any required third party dependencies into the container.
 ENV GO111MODULE off
-RUN go build -o /go/bin/veneur .
+RUN go build -o /go/bin/veneur ./cmd/veneur/main.go
 
 # Base image for runtime
 FROM debian:latest
