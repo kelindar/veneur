@@ -1,13 +1,20 @@
-FROM golang:1.14
+FROM golang:1.14 AS builder
 LABEL maintainer="roman.atachiants@gmail.com"
 
-# add ca certificates for http secured connection
-RUN apt-get update && apt-get install -y ca-certificates && rm -rf /var/cache/apk/*
-
-# copy the binary
-WORKDIR /root/  
+# Copy to GOPATH
+RUN apk add --no-cache gcc libc-dev
+RUN mkdir -p /usr/local/go/src/github.com/stripe/veneur/
+WORKDIR /usr/local/go/src/github.com/stripe/veneur/
 COPY . .
-RUN go build -o /root/veneur ./cmd/veneur/ && chmod +x /root/veneur
+RUN CGO_ENABLED=0 GOOS=linux go build -a
 
-# Expose the port and start the service
-CMD ["/root/veneur"]
+
+# Final container
+FROM debian AS final
+ARG ENV
+
+RUN apt-get update && apt-get install -y ca-certificates && rm -rf /var/cache/apk/*
+WORKDIR /root/
+COPY --from=builder /usr/local/go/src/github.com/stripe/veneur/veneur .
+COPY --from=builder /usr/local/go/src/github.com/stripe/veneur/_envs/env_$ENV.yaml ./_envs/
+CMD [ "/root/veneur" ]
