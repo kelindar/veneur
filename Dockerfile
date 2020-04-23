@@ -1,4 +1,4 @@
-FROM debian:latest AS builder
+FROM golang:1.14
 LABEL maintainer="roman.atachiants@gmail.com"
 
 # add ca certificates for http secured connection
@@ -10,5 +10,4 @@ RUN go build -o /root/veneur ./cmd/veneur/.
 RUN chmod +x /root/veneur
 
 # Expose the port and start the service
-EXPOSE 8027
 CMD ["/root/veneur"]
