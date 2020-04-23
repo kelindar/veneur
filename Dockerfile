@@ -6,8 +6,8 @@ RUN apt-get update && apt-get install -y ca-certificates && rm -rf /var/cache/ap
 
 # copy the binary
 WORKDIR /root/  
-RUN go build -o /root/veneur ./cmd/veneur/
-RUN chmod +x /root/veneur
+COPY . .
+RUN go build -o /root/veneur ./cmd/veneur/ && chmod +x /root/veneur
 
 # Expose the port and start the service
 CMD ["/root/veneur"]
