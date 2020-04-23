@@ -10,8 +10,8 @@ ADD . /go-build/src/github.com/stripe/veneur/
 RUN go build -o /go/bin/veneur ./cmd/veneur/
 
 # Base image for runtime
-FROM alpine:latest
-RUN apt-get update && apt-get install -y ca-certificates && rm -rf /var/cache/apk/*
+FROM debian:latest
+RUN apt-get update && apt-get install -y ca-certificates
 
 WORKDIR /root/
 COPY --from=builder /go/bin/veneur .
