@@ -16,4 +16,5 @@ RUN apt-get update && apt-get install -y ca-certificates
 
 WORKDIR /root/
 COPY --from=builder /go/bin/veneur .
+RUN chmod +x ./veneur
 CMD ["./veneur"]
