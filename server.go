@@ -49,6 +49,7 @@ import (
 	"github.com/stripe/veneur/sinks/falconer"
 	"github.com/stripe/veneur/sinks/kafka"
 	"github.com/stripe/veneur/sinks/lightstep"
+	"github.com/stripe/veneur/sinks/pug"
 	"github.com/stripe/veneur/sinks/signalfx"
 	"github.com/stripe/veneur/sinks/splunk"
 	"github.com/stripe/veneur/sinks/ssfmetrics"
@@ -625,6 +626,16 @@ func NewFromConfig(logger *logrus.Logger, conf Config) (*Server, error) {
 		if conf.NumSpanWorkers > 0 {
 			ret.SpanWorkerGoroutines = conf.NumSpanWorkers
 		}
+	}
+
+	if conf.PugAddress != "" {
+		pugsink, err := pug.NewPugSink(context.Background(), conf.PugAddress, log, grpc.WithInsecure())
+		if err != nil {
+			return ret, err
+		}
+
+		ret.metricSinks = append(ret.metricSinks, pugsink)
+		logger.Info("Configured Pug metric sink")
 	}
 
 	if conf.KafkaBroker != "" {

@@ -1,0 +1,20 @@
+syntax = "proto3";
+package pug;
+
+service MetricSink {
+    rpc SendMetric(Request) returns (Empty);
+}
+
+message Request {
+    repeated Metric metrics = 1;
+}
+
+message Metric {
+    string name = 1;
+    int32 type = 2;
+    int64 time = 3;
+    double value = 4;
+    repeated string tags = 5;
+}
+
+message Empty {}
