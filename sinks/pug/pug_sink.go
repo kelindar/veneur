@@ -53,7 +53,7 @@ func (s *Sink) Start(cl *trace.Client) error {
 	return nil
 }
 
-// Flush ...
+// Flush flushes the metrics
 func (s *Sink) Flush(ctx context.Context, metrics []samplers.InterMetric) error {
 	if len(metrics) == 0 {
 		return nil
