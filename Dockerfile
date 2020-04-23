@@ -1,4 +1,4 @@
-FROM golang:1.13 AS builder
+FROM golang:1.14 AS builder
 LABEL maintainer="roman.atachiants@gmail.com"
 
 # Copy the directory into the container outside of the gopath
@@ -7,7 +7,7 @@ WORKDIR /go-build/src/github.com/stripe/veneur/
 ADD . /go-build/src/github.com/stripe/veneur/
 
 # Download and install any required third party dependencies into the container.
-RUN go build -o /go/bin/veneur .
+RUN go build -mod=vendor -o /go/bin/veneur .
 
 # Base image for runtime
 FROM debian:latest
