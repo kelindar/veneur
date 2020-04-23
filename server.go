@@ -1367,7 +1367,7 @@ func (s *Server) HTTPServe() {
 
 	// Ensure that the server responds to SIGUSR2 even
 	// when *not* running under einhorn.
-	graceful.AddSignal(syscall.SIGUSR2, syscall.SIGHUP)
+	graceful.AddSignal(syscall.SIGHUP)
 	graceful.HandleSignals()
 	gracefulSocket := graceful.WrapListener(httpSocket)
 	log.WithField("address", s.HTTPAddr).Info("HTTP server listening")
