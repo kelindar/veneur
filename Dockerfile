@@ -1,18 +1,18 @@
 FROM golang:1.14 AS builder
 LABEL maintainer="roman.atachiants@gmail.com"
 
-# Copy to GOPATH
-RUN mkdir -p /usr/local/go/src/github.com/stripe/veneur/
-WORKDIR /usr/local/go/src/github.com/stripe/veneur/
-COPY . .
-RUN go build ./cmd/veneur/
+# Copy the directory into the container outside of the gopath
+RUN mkdir -p /go-build/src/github.com/stripe/veneur/
+WORKDIR /go-build/src/github.com/stripe/veneur/
+ADD . /go-build/src/github.com/stripe/veneur/
 
-# Final container
-FROM debian AS final
-ARG ENV
+# Download and install any required third party dependencies into the container.
+RUN go build -o /go/bin/veneur ./cmd/veneur/
 
+# Base image for runtime
+FROM alpine:latest
 RUN apt-get update && apt-get install -y ca-certificates && rm -rf /var/cache/apk/*
+
 WORKDIR /root/
-COPY --from=builder /usr/local/go/src/github.com/stripe/veneur/veneur .
-COPY --from=builder /usr/local/go/src/github.com/stripe/veneur/_envs/env_$ENV.yaml ./_envs/
-CMD [ "/root/veneur" ]
+COPY --from=builder /go/bin/veneur .
+CMD ["./veneur"]
