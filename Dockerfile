@@ -1,4 +1,4 @@
-FROM golang:1.14 AS builder
+FROM golang:1.13 AS builder
 LABEL maintainer="roman.atachiants@gmail.com"
 
 # Copy the directory into the container outside of the gopath
