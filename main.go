@@ -1,4 +1,4 @@
-package main
+package veneur
 
 import (
 	"flag"
@@ -7,7 +7,6 @@ import (
 
 	"github.com/getsentry/raven-go"
 	"github.com/sirupsen/logrus"
-	"github.com/stripe/veneur"
 	"github.com/stripe/veneur/ssf"
 	"github.com/stripe/veneur/trace"
 )
@@ -29,9 +28,9 @@ func main() {
 		logrus.Fatal("You must specify a config file")
 	}
 
-	conf, err := veneur.ReadConfig(*configFile)
+	conf, err := ReadConfig(*configFile)
 	if err != nil {
-		if _, ok := err.(*veneur.UnknownConfigKeys); ok {
+		if _, ok := err.(*UnknownConfigKeys); ok {
 			if *validateConfigStrict {
 				logrus.WithError(err).Fatal("Config contains invalid or deprecated keys")
 			} else {
@@ -47,8 +46,8 @@ func main() {
 	}
 
 	logger := logrus.StandardLogger()
-	server, err := veneur.NewFromConfig(logger, conf)
-	veneur.SetLogger(logger)
+	server, err := NewFromConfig(logger, conf)
+	SetLogger(logger)
 	if err != nil {
 		e := err
 
@@ -79,7 +78,7 @@ func main() {
 	ssf.NamePrefix = "veneur."
 
 	defer func() {
-		veneur.ConsumePanic(server.Sentry, server.TraceClient, server.Hostname, recover())
+		ConsumePanic(server.Sentry, server.TraceClient, server.Hostname, recover())
 	}()
 
 	if server.TraceClient != nil {

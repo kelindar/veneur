@@ -7,7 +7,7 @@ WORKDIR /go-build/src/github.com/stripe/veneur/
 ADD . /go-build/src/github.com/stripe/veneur/
 
 # Download and install any required third party dependencies into the container.
-RUN go install
+RUN go build -o /go/bin/veneur .
 
 # Base image for runtime
 FROM debian:latest
