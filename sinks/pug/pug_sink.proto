@@ -10,11 +10,12 @@ message Request {
 }
 
 message Metric {
-    string name = 1;
-    int32 type = 2;
-    int64 time = 3;
-    double value = 4;
-    repeated string tags = 5;
+    string          name  = 1;
+    int32           type  = 2;
+    int64           time  = 3;
+    double          value = 4;
+    repeated string tags  = 5;
+    string          host  = 6;
 }
 
 message Empty {}

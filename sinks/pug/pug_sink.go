@@ -68,6 +68,7 @@ func (s *Sink) Flush(ctx context.Context, metrics []samplers.InterMetric) error 
 			Time:  m.Timestamp,
 			Value: m.Value,
 			Tags:  m.Tags,
+			Host:  m.HostName,
 		})
 	}
 
