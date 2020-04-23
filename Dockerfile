@@ -16,5 +16,6 @@ RUN apt-get update && apt-get install -y ca-certificates
 
 WORKDIR /root/
 COPY --from=builder /go/bin/veneur .
+COPY --from=builder /go/src/github.com/stripe/veneur/example.yaml ./config.yaml
 RUN chmod +x ./veneur
-CMD ["./veneur"]
+CMD ["./veneur", "-f", "config.yaml"]
